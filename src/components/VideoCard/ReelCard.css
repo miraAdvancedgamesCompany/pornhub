@@ -9,6 +9,9 @@
   align-items: center;
   justify-content: center;
   overflow: hidden;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: pan-y;
 }
 
 .reel-video {
@@ -105,6 +108,7 @@
   text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
 }
 
+/* === Center Play/Pause Indicator === */
 .reel-play-center {
   position: absolute;
   top: 50%;
@@ -118,20 +122,150 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  pointer-events: auto;
-  cursor: pointer;
+  pointer-events: none;
   opacity: 0;
   transition: opacity 0.2s ease;
+  z-index: 10;
 }
 
 .reel-play-center.show {
   opacity: 1;
+  animation: scaleIn 0.2s ease;
 }
 
 .reel-play-center svg {
   width: 32px;
   height: 32px;
   color: white;
+}
+
+/* === Skip Forward / Backward Indicators === */
+.reel-skip-indicator {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 16px;
+  border-radius: var(--radius-full);
+  background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(8px);
+  pointer-events: none;
+  z-index: 10;
+}
+
+.reel-skip-indicator svg {
+  width: 28px;
+  height: 28px;
+  color: white;
+}
+
+.reel-skip-indicator span {
+  font-size: 12px;
+  font-weight: 700;
+  color: white;
+}
+
+.reel-skip-right {
+  right: 15%;
+}
+
+.reel-skip-left {
+  left: 15%;
+}
+
+/* === 2x Speed Indicator === */
+.reel-speed-indicator {
+  position: absolute;
+  top: 60px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(8px);
+  padding: 6px 18px;
+  border-radius: 20px;
+  pointer-events: none;
+  z-index: 10;
+  animation: fadeIn 0.2s ease;
+}
+
+.reel-speed-indicator span {
+  font-size: 14px;
+  font-weight: 700;
+  color: white;
+  letter-spacing: 1px;
+}
+
+/* === Bottom Progress Bar (Draggable Timeline) === */
+.reel-progress-area {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 0 var(--space-md) 6px;
+  pointer-events: auto;
+  z-index: 20;
+  background: linear-gradient(transparent, rgba(0, 0, 0, 0.4));
+}
+
+.reel-time-display {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 2px 4px;
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.7);
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+}
+
+.reel-progress-bar {
+  width: 100%;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 2px;
+  cursor: pointer;
+  position: relative;
+  transition: height 0.15s ease;
+}
+
+.reel-progress-area:hover .reel-progress-bar,
+.reel-progress-area:active .reel-progress-bar {
+  height: 6px;
+}
+
+.reel-progress-fill {
+  height: 100%;
+  background: white;
+  border-radius: 2px;
+  position: relative;
+  max-width: 100%;
+  transition: width 0.1s linear;
+}
+
+.reel-progress-thumb {
+  position: absolute;
+  right: -6px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 12px;
+  height: 12px;
+  border-radius: var(--radius-full);
+  background: white;
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.5);
+  opacity: 0;
+  transition: opacity 0.15s ease;
+}
+
+[dir="rtl"] .reel-progress-thumb {
+  right: auto;
+  left: -6px;
+}
+
+.reel-progress-area:hover .reel-progress-thumb,
+.reel-progress-area:active .reel-progress-thumb {
+  opacity: 1;
 }
 
 @media (max-width: 768px) {
@@ -142,5 +276,14 @@
 
   .reel-side-actions {
     bottom: 90px;
+  }
+
+  /* Always show thumb on mobile for easier touch */
+  .reel-progress-thumb {
+    opacity: 1;
+  }
+
+  .reel-progress-bar {
+    height: 4px;
   }
 }

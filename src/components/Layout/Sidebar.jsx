@@ -1,5 +1,5 @@
 import { NavLink } from 'react-router-dom'
-import { Home, Film, PlaySquare, Settings } from 'lucide-react'
+import { Home, Film, PlaySquare } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import './Sidebar.css'
 
@@ -33,16 +33,6 @@ export default function Sidebar() {
           </NavLink>
         ))}
       </nav>
-
-      <div className="sidebar-bottom">
-        <NavLink
-          to="/dach"
-          className={({ isActive }) => `sidebar-link ${isActive ? 'active' : ''}`}
-          title={t('nav.dashboard')}
-        >
-          <Settings />
-        </NavLink>
-      </div>
     </aside>
   )
 }

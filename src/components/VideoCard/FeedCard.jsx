@@ -1,6 +1,6 @@
 import { useState, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Play, Pause, Eye, Share2, Film } from 'lucide-react'
+import { Eye, Share2, Film } from 'lucide-react'
 import './FeedCard.css'
 
 function formatDuration(seconds) {
@@ -19,7 +19,7 @@ function formatViews(count) {
 
 export default function FeedCard({ video, onView }) {
   const { t, i18n } = useTranslation()
-  const [playing, setPlaying] = useState(false)
+  const [hasStarted, setHasStarted] = useState(false)
   const videoRef = useRef(null)
   const isAr = i18n.language === 'ar'
 
@@ -29,15 +29,9 @@ export default function FeedCard({ video, onView }) {
     ? (isAr ? video.categories.name_ar : video.categories.name_en)
     : null
 
-  const togglePlay = () => {
-    if (!videoRef.current) return
-    if (playing) {
-      videoRef.current.pause()
-    } else {
-      videoRef.current.play()
-      if (onView) onView(video.id)
-    }
-    setPlaying(!playing)
+  const handlePlay = () => {
+    setHasStarted(true)
+    if (onView) onView(video.id)
   }
 
   const handleShare = async () => {
@@ -75,7 +69,7 @@ export default function FeedCard({ video, onView }) {
         <p className="feed-description">{description}</p>
       )}
 
-      <div className="feed-video-wrapper" onClick={togglePlay}>
+      <div className="feed-video-wrapper">
         {video.video_url ? (
           <video
             ref={videoRef}
@@ -84,7 +78,9 @@ export default function FeedCard({ video, onView }) {
             preload="metadata"
             playsInline
             loop
-            onEnded={() => setPlaying(false)}
+            controls
+            controlsList="nodownload"
+            onPlay={handlePlay}
           />
         ) : video.thumbnail_url ? (
           <img src={video.thumbnail_url} alt={title} className="feed-thumbnail" />
@@ -92,13 +88,7 @@ export default function FeedCard({ video, onView }) {
           <div style={{ height: 300, background: 'var(--bg-card)' }} />
         )}
 
-        <div className={`feed-play-overlay ${playing ? 'hidden' : ''}`}>
-          <div className="feed-play-btn">
-            {playing ? <Pause /> : <Play />}
-          </div>
-        </div>
-
-        {video.duration && (
+        {!hasStarted && video.duration && (
           <span className="feed-duration">{formatDuration(video.duration)}</span>
         )}
       </div>
