@@ -39,6 +39,8 @@ export default function VideoManager() {
   const [type, setType] = useState('feed')
   const [categoryId, setCategoryId] = useState('')
   const [selectedStorage, setSelectedStorage] = useState('auto')
+  const [videoSourceType, setVideoSourceType] = useState('file') // 'file' | 'url'
+  const [directVideoUrl, setDirectVideoUrl] = useState('')
   const [videoFile, setVideoFile] = useState(null)
   const [thumbFile, setThumbFile] = useState(null)
 
@@ -89,6 +91,13 @@ export default function VideoManager() {
     setSelectedStorage(video.storage_account_id || 'auto')
     setVideoFile(null)
     setThumbFile(null)
+    if (video.video_url && !video.video_url.includes('supabase.co/storage')) {
+      setVideoSourceType('url')
+      setDirectVideoUrl(video.video_url)
+    } else {
+      setVideoSourceType('file')
+      setDirectVideoUrl('')
+    }
     setShowModal(true)
   }
 
@@ -126,16 +135,34 @@ export default function VideoManager() {
         targetAccount = accounts.find(a => a.id === selectedStorage)
       }
 
-      // Upload video file if provided
-      if (videoFile) {
-        const filePath = `videos/${Date.now()}_${videoFile.name}`
+      // Process video source
+      if (videoSourceType === 'url') {
+        if (directVideoUrl.trim()) {
+          videoUrl = directVideoUrl.trim()
+        }
+      } else if (videoFile) {
+        // Enforce 50MB max file size limit for desktop file uploads
+        const MAX_FILE_SIZE = 50 * 1024 * 1024 // 50 MB in bytes
+        if (videoFile.size > MAX_FILE_SIZE) {
+          clearProgress()
+          setUploading(false)
+          toast.warning(t('dach.file_size_exceeded'))
+          return
+        }
+
+        // Remove special characters and spaces from filename
+        const safeFileName = videoFile.name.replace(/[^a-zA-Z0-9._-]/g, '_')
+        const filePath = `videos/${Date.now()}_${safeFileName}`
         if (targetAccount) {
           await uploadToStorage(targetAccount, filePath, videoFile)
           videoUrl = getPublicUrl(targetAccount, filePath)
           storageAccountId = targetAccount.id
         } else {
-          const { data, error } = await supabase.storage.from('videos').upload(filePath, videoFile)
-          if (!error && data) {
+          const { data, error: uploadErr } = await supabase.storage.from('videos').upload(filePath, videoFile)
+          if (uploadErr) {
+            throw new Error(`خطأ في رفع الفيديو إلى التخزين: ${uploadErr.message || 'تأكد من إعدادات Supabase Storage'}`)
+          }
+          if (data) {
             const { data: pubData } = supabase.storage.from('videos').getPublicUrl(filePath)
             videoUrl = pubData.publicUrl
           }
@@ -254,6 +281,7 @@ export default function VideoManager() {
     setTitleEn(''); setTitleAr(''); setDescEn(''); setDescAr('')
     setType('feed'); setCategoryId(''); setSelectedStorage('auto')
     setVideoFile(null); setThumbFile(null); setEditingVideo(null)
+    setVideoSourceType('file'); setDirectVideoUrl('')
     setUploadProgress(0)
   }
 
@@ -486,17 +514,52 @@ export default function VideoManager() {
                 </div>
               )}
 
+              <div className="dach-form-field">
+                <label className="dach-form-label">{t('dach.video_source_type')}</label>
+                <div className="dach-source-toggle">
+                  <button
+                    type="button"
+                    className={`dach-source-btn ${videoSourceType === 'file' ? 'active' : ''}`}
+                    onClick={() => setVideoSourceType('file')}
+                  >
+                    📁 {t('dach.video_source_file')}
+                  </button>
+                  <button
+                    type="button"
+                    className={`dach-source-btn ${videoSourceType === 'url' ? 'active' : ''}`}
+                    onClick={() => setVideoSourceType('url')}
+                  >
+                    🔗 {t('dach.video_source_url')}
+                  </button>
+                </div>
+              </div>
+
               <div className="dach-form-grid">
                 <div className="dach-form-field">
                   <label className="dach-form-label">
-                    {isEditMode ? t('dach.change_video') : t('dach.video_file')}
+                    {videoSourceType === 'file'
+                      ? (isEditMode ? t('dach.change_video') : t('dach.video_file'))
+                      : t('dach.video_source_url')
+                    }
                   </label>
-                  <input
-                    type="file"
-                    accept="video/*"
-                    onChange={(e) => setVideoFile(e.target.files[0])}
-                  />
-                  {isEditMode && !videoFile && editingVideo?.video_url && (
+                  {videoSourceType === 'file' ? (
+                    <>
+                      <input
+                        type="file"
+                        accept="video/*"
+                        onChange={(e) => setVideoFile(e.target.files[0])}
+                      />
+                      <span className="dach-file-hint">{t('dach.max_file_size_hint')}</span>
+                    </>
+                  ) : (
+                    <input
+                      type="url"
+                      placeholder={t('dach.direct_url_placeholder')}
+                      value={directVideoUrl}
+                      onChange={(e) => setDirectVideoUrl(e.target.value)}
+                    />
+                  )}
+                  {isEditMode && !videoFile && !directVideoUrl && editingVideo?.video_url && (
                     <span className="dach-file-hint">{t('dach.keep_current')}</span>
                   )}
                 </div>

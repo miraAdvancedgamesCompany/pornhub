@@ -500,6 +500,38 @@
   cursor: not-allowed;
 }
 
+/* Source Toggle Pills */
+.dach-source-toggle {
+  display: flex;
+  gap: var(--space-xs);
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 4px;
+}
+
+.dach-source-btn {
+  flex: 1;
+  padding: 8px 12px;
+  border-radius: var(--radius-sm);
+  font-size: var(--font-xs);
+  font-weight: 500;
+  color: var(--text-secondary);
+  transition: all var(--transition-fast);
+  text-align: center;
+}
+
+.dach-source-btn:hover {
+  color: var(--text-primary);
+}
+
+.dach-source-btn.active {
+  background: var(--bg-card);
+  color: var(--text-primary);
+  border: 1px solid var(--border-light);
+  box-shadow: var(--shadow-sm);
+}
+
 /* ===== Responsive ===== */
 
 @media (max-width: 768px) {

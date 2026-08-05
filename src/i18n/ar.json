@@ -1,5 +1,5 @@
 {
-  "app_name": "ستريم إكس",
+  "app_name": "PornHub.Fan",
   "nav": {
     "feed": "الرئيسية",
     "reels": "ريلز",
@@ -60,6 +60,12 @@
     "video_type": "نوع العرض",
     "video_category": "التصنيف",
     "video_file": "ملف الفيديو",
+    "video_source_type": "مصدر الفيديو",
+    "video_source_file": "رفع ملف (50MB أو أقل)",
+    "video_source_url": "رابط فيديو مباشر URL",
+    "direct_url_placeholder": "أدخل رابط الفيديو المباشر (https://...)",
+    "file_size_exceeded": "حجم الملف يتجاوز 50 ميجابايت. الرجاء استخدام خيار الرابط المباشر.",
+    "max_file_size_hint": "الحد الأقصى للرفع المباشر من الجهاز هو 50 ميجابايت",
     "thumbnail_file": "الصورة المصغرة",
     "storage_account": "حساب التخزين",
     "auto_select": "تلقائي (الأقل استخداماً)",

@@ -1,5 +1,5 @@
 {
-  "app_name": "StreamX",
+  "app_name": "PornHub.Fan",
   "nav": {
     "feed": "Feed",
     "reels": "Reels",
@@ -60,6 +60,12 @@
     "video_type": "Display Type",
     "video_category": "Category",
     "video_file": "Video File",
+    "video_source_type": "Video Source",
+    "video_source_file": "Upload File (50MB or less)",
+    "video_source_url": "Direct Video URL",
+    "direct_url_placeholder": "Enter direct video URL (https://...)",
+    "file_size_exceeded": "File size exceeds 50MB. Please use Direct URL option.",
+    "max_file_size_hint": "Maximum upload size from device is 50MB",
     "thumbnail_file": "Thumbnail",
     "storage_account": "Storage Account",
     "auto_select": "Auto (least used)",
