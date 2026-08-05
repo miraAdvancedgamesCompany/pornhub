@@ -1,14 +1,7 @@
 import { useState, useRef, useEffect, useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Play, Pause, Share2, Eye, FastForward, Rewind } from 'lucide-react'
+import { Play, Pause, FastForward, Rewind } from 'lucide-react'
 import './ReelCard.css'
-
-function formatViews(count) {
-  if (!count) return '0'
-  if (count >= 1000000) return (count / 1000000).toFixed(1) + 'M'
-  if (count >= 1000) return (count / 1000).toFixed(1) + 'K'
-  return count.toString()
-}
 
 function formatTime(sec) {
   if (!sec || isNaN(sec)) return '0:00'
@@ -300,17 +293,6 @@ export default function ReelCard({ video, isActive, onView }) {
         <div className="reel-title">{title}</div>
         {description && <div className="reel-description">{description}</div>}
         {categoryName && <span className="reel-category">{categoryName}</span>}
-      </div>
-
-      {/* Side action buttons */}
-      <div className="reel-side-actions">
-        <button className="reel-side-btn" onClick={(e) => e.stopPropagation()}>
-          <Eye />
-          <span>{formatViews(video.views_count)}</span>
-        </button>
-        <button className="reel-side-btn" onClick={handleShare}>
-          <Share2 />
-        </button>
       </div>
 
       {/* Bottom progress bar + time */}

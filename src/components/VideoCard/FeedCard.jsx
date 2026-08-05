@@ -1,6 +1,6 @@
 import { useState, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Eye, Share2, Film } from 'lucide-react'
+import { Film } from 'lucide-react'
 import './FeedCard.css'
 
 function formatDuration(seconds) {
@@ -10,15 +10,8 @@ function formatDuration(seconds) {
   return `${m}:${s.toString().padStart(2, '0')}`
 }
 
-function formatViews(count) {
-  if (!count) return '0'
-  if (count >= 1000000) return (count / 1000000).toFixed(1) + 'M'
-  if (count >= 1000) return (count / 1000).toFixed(1) + 'K'
-  return count.toString()
-}
-
 export default function FeedCard({ video, onView }) {
-  const { t, i18n } = useTranslation()
+  const { i18n } = useTranslation()
   const [hasStarted, setHasStarted] = useState(false)
   const videoRef = useRef(null)
   const isAr = i18n.language === 'ar'
@@ -32,21 +25,6 @@ export default function FeedCard({ video, onView }) {
   const handlePlay = () => {
     setHasStarted(true)
     if (onView) onView(video.id)
-  }
-
-  const handleShare = async () => {
-    try {
-      if (navigator.share) {
-        await navigator.share({
-          title: title,
-          url: window.location.href
-        })
-      } else {
-        await navigator.clipboard.writeText(window.location.href)
-      }
-    } catch (err) {
-      // Cancelled or not supported
-    }
   }
 
   return (
@@ -91,17 +69,6 @@ export default function FeedCard({ video, onView }) {
         {!hasStarted && video.duration && (
           <span className="feed-duration">{formatDuration(video.duration)}</span>
         )}
-      </div>
-
-      <div className="feed-actions">
-        <button className="feed-action-btn">
-          <Eye />
-          <span>{formatViews(video.views_count)} {t('feed.views')}</span>
-        </button>
-        <button className="feed-action-btn" onClick={handleShare}>
-          <Share2 />
-          <span>{t('feed.share')}</span>
-        </button>
       </div>
     </article>
   )

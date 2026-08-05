@@ -61,9 +61,6 @@ export default function VideoGridCard({ video, index = 0, onView }) {
 
       <div className="video-grid-body">
         <h3 className="video-grid-title">{title}</h3>
-        <div className="video-grid-meta">
-          <span>{formatViews(video.views_count)} {t('feed.views')}</span>
-        </div>
         {categoryName && (
           <span className="video-grid-category">{categoryName}</span>
         )}

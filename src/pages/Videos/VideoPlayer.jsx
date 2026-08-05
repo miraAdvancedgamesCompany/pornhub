@@ -6,6 +6,7 @@ import { supabase } from '../../config/supabase'
 import VideoGridCard from '../../components/VideoCard/VideoGridCard'
 import Spinner from '../../components/Loading/Spinner'
 import Header from '../../components/Layout/Header'
+import { AdBanner } from '../../components/Ads/AdsterraBanner'
 import './VideoPlayer.css'
 
 function formatViews(count) {
@@ -87,19 +88,18 @@ export default function VideoPlayer() {
 
         <div className="player-info">
           <h1 className="player-title">{title}</h1>
-          <div className="player-meta">
-            <span className="flex items-center gap-xs">
-              <Eye style={{ width: 16, height: 16 }} />
-              {formatViews(video.views_count)} {t('feed.views')}
-            </span>
-            {categoryName && (
+          {categoryName && (
+            <div className="player-meta">
               <span className="player-category">{categoryName}</span>
-            )}
-          </div>
+            </div>
+          )}
           {description && (
             <p className="player-description">{description}</p>
           )}
         </div>
+
+        {/* Adsterra Banner 600x160 / 300x250 */}
+        <AdBanner atKey="2e00024a3d4f7a5aa11126bce1250eed" width={600} height={160} />
 
         {related.length > 0 && (
           <div className="player-related">
