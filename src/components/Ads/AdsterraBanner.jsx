@@ -1,12 +1,32 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 export function AdBanner({ atKey, width, height }) {
   const containerRef = useRef(null)
+  const [scale, setScale] = useState(1)
+
+  // Auto-scale banner on small mobile screens to prevent overflow & zoom-out issues
+  useEffect(() => {
+    const handleResize = () => {
+      if (!containerRef.current) return
+      const parentWidth = containerRef.current.parentElement?.clientWidth || window.innerWidth
+      if (parentWidth < width) {
+        setScale(parentWidth / width)
+      } else {
+        setScale(1)
+      }
+    }
+
+    handleResize()
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
+  }, [width])
 
   useEffect(() => {
     const container = containerRef.current
     if (!container) return
-    container.innerHTML = ''
+    const iframeContainer = container.querySelector('.ad-iframe-box')
+    if (!iframeContainer) return
+    iframeContainer.innerHTML = ''
 
     const iframe = document.createElement('iframe')
     iframe.width = width
@@ -18,7 +38,7 @@ export function AdBanner({ atKey, width, height }) {
     const html = `
       <!DOCTYPE html>
       <html>
-      <head><style>body { margin: 0; padding: 0; background: transparent; display: flex; justify-content: center; align-items: center; }</style></head>
+      <head><style>body { margin: 0; padding: 0; background: transparent; display: flex; justify-content: center; align-items: center; overflow: hidden; }</style></head>
       <body>
         <script type="text/javascript">
           atOptions = {
@@ -34,7 +54,7 @@ export function AdBanner({ atKey, width, height }) {
       </html>
     `
 
-    container.appendChild(iframe)
+    iframeContainer.appendChild(iframe)
     iframe.contentWindow.document.open()
     iframe.contentWindow.document.write(html)
     iframe.contentWindow.document.close()
@@ -47,12 +67,25 @@ export function AdBanner({ atKey, width, height }) {
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        margin: '16px 0',
-        minHeight: height,
+        margin: '12px 0',
         width: '100%',
-        overflow: 'hidden'
+        maxWidth: '100%',
+        overflow: 'hidden',
+        minHeight: height * scale,
+        height: height * scale
       }}
-    />
+    >
+      <div
+        className="ad-iframe-box"
+        style={{
+          width: width,
+          height: height,
+          transform: scale < 1 ? `scale(${scale})` : 'none',
+          transformOrigin: 'center center',
+          flexShrink: 0
+        }}
+      />
+    </div>
   )
 }
 
@@ -83,8 +116,10 @@ export function NativeAdBanner() {
     <div
       ref={containerRef}
       style={{
-        margin: '16px 0',
+        margin: '12px 0',
         width: '100%',
+        maxWidth: '100%',
+        overflow: 'hidden',
         display: 'flex',
         justifyContent: 'center'
       }}
