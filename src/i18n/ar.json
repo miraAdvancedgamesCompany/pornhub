@@ -1,0 +1,90 @@
+{
+  "app_name": "ستريم إكس",
+  "nav": {
+    "feed": "الرئيسية",
+    "reels": "ريلز",
+    "videos": "فيديوهات",
+    "dashboard": "لوحة التحكم",
+    "search": "بحث"
+  },
+  "feed": {
+    "title": "الرئيسية",
+    "empty": "لا توجد فيديوهات بعد",
+    "views": "مشاهدة",
+    "share": "مشاركة"
+  },
+  "reels": {
+    "title": "ريلز",
+    "swipe_up": "اسحب للأعلى للمزيد"
+  },
+  "videos": {
+    "title": "فيديوهات",
+    "watch": "مشاهدة",
+    "duration": "المدة",
+    "no_videos": "لا توجد فيديوهات"
+  },
+  "categories": {
+    "all": "الكل",
+    "title": "التصنيفات"
+  },
+  "player": {
+    "back": "رجوع",
+    "related": "فيديوهات ذات صلة"
+  },
+  "dach": {
+    "title": "لوحة التحكم",
+    "login": "تسجيل الدخول",
+    "password": "كلمة المرور",
+    "enter_password": "أدخل كلمة مرور لوحة التحكم",
+    "login_btn": "الدخول للوحة التحكم",
+    "wrong_password": "كلمة المرور خاطئة",
+    "logout": "تسجيل الخروج",
+    "overview": "نظرة عامة",
+    "total_videos": "إجمالي الفيديوهات",
+    "total_categories": "إجمالي التصنيفات",
+    "storage_accounts": "حسابات التخزين",
+    "storage_used": "المساحة المستخدمة",
+    "manage_videos": "إدارة الفيديوهات",
+    "manage_categories": "إدارة التصنيفات",
+    "manage_storage": "إدارة التخزين",
+    "add_video": "إضافة فيديو",
+    "edit_video": "تعديل الفيديو",
+    "delete_video": "حذف الفيديو",
+    "video_title_en": "العنوان (إنجليزي)",
+    "video_title_ar": "العنوان (عربي)",
+    "video_desc_en": "الوصف (إنجليزي)",
+    "video_desc_ar": "الوصف (عربي)",
+    "video_type": "نوع العرض",
+    "video_category": "التصنيف",
+    "video_file": "ملف الفيديو",
+    "thumbnail_file": "الصورة المصغرة",
+    "storage_account": "حساب التخزين",
+    "auto_select": "تلقائي (الأقل استخداماً)",
+    "upload": "رفع",
+    "uploading": "جاري الرفع...",
+    "save": "حفظ",
+    "cancel": "إلغاء",
+    "confirm_delete": "هل أنت متأكد من الحذف؟",
+    "add_category": "إضافة تصنيف",
+    "category_name_en": "الاسم (إنجليزي)",
+    "category_name_ar": "الاسم (عربي)",
+    "add_storage": "إضافة حساب تخزين",
+    "account_name": "اسم الحساب",
+    "supabase_url": "رابط Supabase",
+    "supabase_key": "مفتاح Supabase",
+    "bucket_name": "اسم الباكت",
+    "max_storage": "الحد الأقصى (جيجابايت)",
+    "used": "مستخدم",
+    "free": "متاح",
+    "active": "نشط",
+    "inactive": "غير نشط",
+    "no_data": "لا توجد بيانات بعد"
+  },
+  "common": {
+    "loading": "جاري التحميل...",
+    "error": "حدث خطأ ما",
+    "retry": "إعادة المحاولة",
+    "close": "إغلاق",
+    "language": "اللغة"
+  }
+}
